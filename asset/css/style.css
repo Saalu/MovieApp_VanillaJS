@@ -39,3 +39,24 @@ header .nav a{
 #btn{
     background: orchid;
 }
+
+section{
+    display: flex;
+    overflow-x: scroll;
+    width: 100%;
+    padding: 20px;
+}
+
+section img{
+    width: 180px;
+    height: 240px;
+    margin: 10px;
+    border-radius: 10px;
+    transition: 350ms all;
+}
+
+img:hover{
+    margin-left:0 40px ;
+    transform: scale(1.2);
+    cursor: pointer;
+}
