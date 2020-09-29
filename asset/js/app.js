@@ -1,6 +1,6 @@
 //Initial connection 
 const API_key = '13034522ae1dba1beb7eb678a5ec0681';
-const url =`https://api.themoviedb.org/3/search/movie?api_key=${API_key}`
+// const url =`https://api.themoviedb.org/3/search/movie?api_key=${API_key}`
 const IMAGE_URL = 'https://image.tmdb.org/t/p/w500'
 //  Selecting DOM Elements
  const movieForm = document.getElementById('form');
@@ -15,6 +15,12 @@ const IMAGE_URL = 'https://image.tmdb.org/t/p/w500'
     movieForm.addEventListener('submit', onSubmit);
     result.addEventListener('click', watchMovie);
   }
+
+  function generateURL(path){
+      const url =`https://api.themoviedb.org/3${path}?api_key=${API_key}`
+      return url
+  }
+
 
 // UI template loop
 function movieSection(movies){
@@ -59,7 +65,8 @@ function renderMovies (data){
     e.preventDefault();
 
     const inputValue = input.value;
-    const newURL = url + '&query=' + inputValue;
+    const path = '/search/movie';
+    const newURL = generateURL(path) + '&query=' + inputValue;
     console.log(newURL)
 
     fetch(newURL)
@@ -79,12 +86,25 @@ function renderMovies (data){
    let target =  e.target
 
    if(target.tagName.toLowerCase() === 'img'){
-
+       const movieId = target.dataset.movieId;
+        console.log(movieId)
       const section = target.parentElement; //section
         const content = section.nextElementSibling; //content
         content.classList.add('content-display');
       console.log(content)
-   }
+      
+      const path =`/movie/${movieId}/videos`;
+      const url = generateURL(path)
+      fetch(url)
+      .then((res)=> res.json() )
+      .then((data)=>{
+          console.log('video', data)
+        })
+        .catch(err => {
+            console.log('Error', err)
+        })
+    }
+
 
    if(target.id === 'content-close'){
        const content = target.parentElement;
