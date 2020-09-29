@@ -7,20 +7,20 @@ const IMAGE_URL = 'https://image.tmdb.org/t/p/w500'
  const searchBtn = document.getElementById('search');
  const input = document.getElementById('input');
  const result = document.getElementById('result');
+//  const imgElement = document.querySelector('img');
 
 //  Event Listeners
   eventListeners()
   function eventListeners(){
-    movieForm.addEventListener('submit', onSubmit)
-
+    movieForm.addEventListener('submit', onSubmit);
+    result.addEventListener('click', watchMovie);
   }
 
 // UI template loop
 function movieSection(movies){
     return movies.map((movie)=>{
         if(movie.poster_path){
-            return `<img src=${IMAGE_URL + movie.poster_path} data-movie-id=${movie.id} />
-                `;
+            return `<img src=${IMAGE_URL + movie.poster_path} data-movie-id=${movie.id} />`;
         }
        })
 }
@@ -45,7 +45,16 @@ function movieContainer(movies){
 
 }
 
-//   function & logic
+function renderMovies (data){
+    result.innerHTML =''
+    const movies = data.results;
+    const movieBlock = movieContainer(movies)
+    result.appendChild(movieBlock)
+    console.log('Data', movies)
+}
+
+
+// submit  function & logic
   function onSubmit (e){
     e.preventDefault();
 
@@ -55,15 +64,33 @@ function movieContainer(movies){
 
     fetch(newURL)
     .then((res)=> res.json() )
-    .then((data)=>{
-        const movies = data.results;
-        const movieBlock = movieContainer(movies)
-        result.appendChild(movieBlock)
-        console.log('Data', movies)
-    })
+    .then((data)=> renderMovies (data))
     .catch(err => {
         console.log('Error', err)
     })
     
+    movieForm.reset()
     console.log(inputValue)
+  }
+
+  //Display video logic
+  function watchMovie(e){
+    e.preventDefault()
+   let target =  e.target
+
+   if(target.tagName.toLowerCase() === 'img'){
+
+      const section = target.parentElement; //section
+        const content = section.nextElementSibling; //content
+        content.classList.add('content-display');
+      console.log(content)
+   }
+
+   if(target.id === 'content-close'){
+       const content = target.parentElement;
+           content.classList.remove('content-display');
+
+
+   }
+
   }
