@@ -80,6 +80,34 @@ function renderMovies (data){
     console.log(inputValue)
   }
 
+//   iFrame
+function createIframe(video){
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${video.key}`;
+    iframe.width =360;
+    iframe.height = 315;
+    iframe.allowFullscreen =true;
+
+    return iframe;
+}
+
+//video template
+function videoTemplate(data, content){
+
+    content.innerHTML = '<p id="content-close">X</p>'
+    const videos = data.results;
+    const length = videos.length > 4 ? 4 : videos.length;
+    const iframeWrapper = document.createElement('div');
+
+
+    for (let i = 0; i< length; i++){
+          const video  = videos[i]; // video
+          const iframe = createIframe(video)
+          iframeWrapper.appendChild(iframe)
+          content.appendChild(iframeWrapper)
+    }
+}
+
   //Display video logic
   function watchMovie(e){
     e.preventDefault()
@@ -98,7 +126,7 @@ function renderMovies (data){
       fetch(url)
       .then((res)=> res.json() )
       .then((data)=>{
-          console.log('video', data)
+        videoTemplate(data, content)
         })
         .catch(err => {
             console.log('Error', err)

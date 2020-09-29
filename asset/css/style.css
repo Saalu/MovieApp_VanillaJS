@@ -24,11 +24,18 @@ padding:0 20px;
 .container{
     background: url('../img/pic.jpg') center/cover ;
     min-width: 100%;
-    min-height: 200px;
     padding:30px;
+ max-height: 200px;
+ overflow: hidden;
+
     /* display: flex; */
     /* opacity: .5; */
     
+}
+
+.container img{
+    height: fit-content;
+
 }
 
 .container:after {
@@ -93,19 +100,38 @@ img:hover{
 
 .content{
     border:  1px solid orchid;
-    height: 250px;
     margin: 0 20px;
     display: none;
+    width: 100%;
+    overflow-x: scroll;
+    /* overflow: hidden; */
+    min-height: 320px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items:center;
+
+    background: url('../img/pic.jpg') center/cover ;
+}
+
+.content  div iframe{
+    margin:  10px;
+    width: 320px;
+    height: 200px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+
 }
 
 #content-close{
     font-weight: bold;
     color: red;
-    margin-left: 10px;
+    /* margin-left: 10px; */
+    margin-bottom: 0;
     font-size: 2rem;
     border-radius:100%;
     background: #555;
-    padding: 5px 10px;
+    padding: 0 10px;
     width: fit-content;
     cursor: pointer;
     opacity: .8;
@@ -117,4 +143,5 @@ img:hover{
 
 .content-display{
     display: block;
+   
 }
