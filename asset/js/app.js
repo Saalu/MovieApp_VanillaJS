@@ -1,12 +1,12 @@
-//Initial connection 
-const API_key = '13034522ae1dba1beb7eb678a5ec0681';
-// const url =`https://api.themoviedb.org/3/search/movie?api_key=${API_key}`
-const IMAGE_URL = 'https://image.tmdb.org/t/p/w500'
+
 //  Selecting DOM Elements
  const movieForm = document.getElementById('form');
  const searchBtn = document.getElementById('search');
  const input = document.getElementById('input');
  const result = document.getElementById('result');
+ const movieWrapper = document.getElementById('movies-container');
+
+ 
 //  const imgElement = document.querySelector('img');
 
 //  Event Listeners
@@ -16,41 +16,58 @@ const IMAGE_URL = 'https://image.tmdb.org/t/p/w500'
     result.addEventListener('click', watchMovie);
   }
 
-  function generateURL(path){
-      const url =`https://api.themoviedb.org/3${path}?api_key=${API_key}`
-      return url
-  }
+ 
 
 
 // UI template loop
 function movieSection(movies){
-    return movies.map((movie)=>{
+    const section = document.createElement('section');
+    section.classList = 'section';
+    movies.map((movie)=>{
         if(movie.poster_path){
-            return `<img src=${IMAGE_URL + movie.poster_path} data-movie-id=${movie.id} />`;
+            const img  = document.createElement('img');
+            img.src = IMAGE_URL + movie.poster_path;
+            img.setAttribute('data-movie-id', movie.id);
+
+            section.appendChild(img);
         }
        })
+
+       return section;
 }
 
 // UI template container
-function movieContainer(movies){
+function movieContainer(movies, title=''){
     const movieElement = document.createElement('div');
     movieElement.classList = 'movie';
 
-    let movieTemplate =`
-        
-    <section class="section">
-         ${movieSection(movies)}
-    </section>
+    const header = document.createElement('h2');
+    header.innerHTML = title;
 
-    <div class="content">
-        <p id="content-close">X</p>
-    </div>
-        `;
-    movieElement.innerHTML = movieTemplate;
-    return movieElement
+    const content = document.createElement('div');
+    // content.classList = 'content';
+
+    const contentClose = `<p id="content-close">X</p>`;
+    // content.innerHTML = contentClose;
+
+    const section = movieSection(movies);
+
+    movieElement.appendChild(header);
+    movieElement.appendChild(section);
+    movieElement.appendChild(content);
+
+   return movieElement;
 
 }
 
+
+
+// error func
+function handleError(error){
+    console.log('Error: ', error)
+}
+
+// render search movies
 function renderMovies (data){
     result.innerHTML =''
     const movies = data.results;
@@ -59,22 +76,22 @@ function renderMovies (data){
     console.log('Data', movies)
 }
 
+// show upcoming
+function showMovies(data){
+    const movies = data.results;
+    const movieBlock = movieContainer(movies, this.title)
+    movieWrapper.appendChild(movieBlock)
+}
+
 
 // submit  function & logic
   function onSubmit (e){
     e.preventDefault();
 
     const inputValue = input.value;
-    const path = '/search/movie';
-    const newURL = generateURL(path) + '&query=' + inputValue;
-    console.log(newURL)
 
-    fetch(newURL)
-    .then((res)=> res.json() )
-    .then((data)=> renderMovies (data))
-    .catch(err => {
-        console.log('Error', err)
-    })
+//  fetch API logic
+    searchMovie(inputValue)
     
     movieForm.reset()
     console.log(inputValue)
@@ -106,6 +123,7 @@ function videoTemplate(data, content){
           iframeWrapper.appendChild(iframe)
           content.appendChild(iframeWrapper)
     }
+
 }
 
   //Display video logic
@@ -118,11 +136,13 @@ function videoTemplate(data, content){
         console.log(movieId)
       const section = target.parentElement; //section
         const content = section.nextElementSibling; //content
+        content.classList.add('content');
         content.classList.add('content-display');
       console.log(content)
       
       const path =`/movie/${movieId}/videos`;
       const url = generateURL(path)
+
       fetch(url)
       .then((res)=> res.json() )
       .then((data)=>{
@@ -136,9 +156,22 @@ function videoTemplate(data, content){
 
    if(target.id === 'content-close'){
        const content = target.parentElement;
-           content.classList.remove('content-display');
-
+           content.classList.remove('content-display')
 
    }
 
   }
+
+  searchMovie('spiderman')
+
+getUpcomingMovies(); 
+
+
+getTopRatedMovies()
+
+getPopularMovies()
+
+
+
+
+

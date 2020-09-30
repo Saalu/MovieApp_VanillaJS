@@ -98,10 +98,14 @@ img:hover{
     cursor: pointer;
 }
 
+.movie h2{
+    margin: 20px  0 0 50px;
+}
+
 .content{
+    display: none;
     border:  1px solid orchid;
     margin: 0 20px;
-    display: none;
     width: 100%;
     overflow-x: scroll;
     /* overflow: hidden; */
@@ -110,7 +114,6 @@ img:hover{
     flex-wrap: wrap;
     justify-content: center;
     align-items:center;
-
     background: url('../img/pic.jpg') center/cover ;
 }
 
